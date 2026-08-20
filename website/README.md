@@ -1,7 +1,8 @@
-# opengym.duarte-santos.ch
+# Project website
 
-Source of the project website — plain hand-written HTML/CSS/JS, no build step,
-served by nginx.
+Plain hand-written HTML/CSS/JS, no build step, served by nginx. Upstream served this at
+opengym.duarte-santos.ch, which is gone; it is kept here unhosted and its canonical URLs
+point at the GitHub Pages demo.
 
 Not in this folder (added at deploy time):
 

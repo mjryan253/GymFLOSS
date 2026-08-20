@@ -3,6 +3,15 @@
 openGym — Copyright (C) 2026 Duarte Santos.
 openGym's own code is licensed under the **GNU AGPL v3.0** (see [LICENSE](LICENSE)).
 
+## Provenance
+
+This repository is a fork. openGym was written by **Duarte Santos**
+(`github.com/DuarteSantos8`), whose repository, website and published images are no longer
+reachable; the only surviving public copy was a re-upload by a third party, from which this
+fork descends. Original authorship and copyright are unchanged and are asserted above.
+Modifications made since the fork are © their respective contributors under the same license.
+See `MAINTAINERS.md` for the full chain of custody.
+
 ## App store exception
 
 As an additional permission under section 7 of the AGPL v3.0, the copyright holder permits
@@ -51,6 +60,18 @@ languages in `frontend/src/instr/`, regenerated via `scripts/build-instructions.
 and animations (fetched into `media/` at build time) come from
 [**hasaneyldrm/exercises-dataset**](https://github.com/hasaneyldrm/exercises-dataset)
 and are **not** covered by openGym's AGPL license — they remain under that dataset's own terms.
-The media files are not distributed in this repository; they are downloaded from the upstream
-source on first run. If you redistribute openGym with the media included, review the upstream
-license first.
+That dataset is MIT for its code, data and instruction text, but its **media carries separate
+terms**:
+
+> The exercise images and animations are **© [Gym visual](https://gymvisual.com/)**,
+> redistributed by the upstream dataset at 180×180 with permission and with the attribution
+> `© Gym visual — https://gymvisual.com/` required to be kept intact. That permission was
+> granted to the dataset and does not extend to downstream forks. Reuse is governed by
+> [Gym visual's Terms & Conditions](https://gymvisual.com/content/3-terms-and-conditions-of-use);
+> obtain your own license there before reusing the media.
+
+Accordingly, **the media files are not distributed in this repository**. `media/` is
+gitignored, and the images and GIFs are fetched from the upstream source at runtime — by the
+`media` service in `docker-compose.yml`, by `scripts/fetch-media.sh`, or from the jsDelivr
+mirror in the mobile and demo builds. Do not commit them, and do not include them in a release
+artifact or a published container image.

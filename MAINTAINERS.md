@@ -6,7 +6,7 @@ came from, what you are legally on the hook for, and the handful of behaviours t
 to break because nothing fails loudly when you do.
 
 Written on inheriting the codebase at **v1.2.4**. Verified against the tree it describes:
-219 tracked files, 192 tests in 7 suites, 11 locales × 628 keys, 1,324 exercises.
+224 tracked files, 192 tests in 7 suites, 11 locales × 628 keys, 1,324 exercises.
 
 ---
 

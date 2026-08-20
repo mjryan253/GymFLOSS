@@ -33,8 +33,11 @@ jobs:
         working-directory: frontend
       - uses: actions/configure-pages@v5
         with:
-          # turns Pages on via the API on first run, so this doesn't need a manual
-          # Settings -> Pages toggle before it can ever succeed
+          # Asks the API to turn Pages on. The default GITHUB_TOKEN is not always
+          # permitted to do that on a user-owned repo, in which case this step fails
+          # until Pages is enabled once by hand:
+          #   Settings -> Pages -> Build and deployment -> Source: GitHub Actions
+          # Everything before this step (npm ci, build:demo) is unaffected.
           enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:

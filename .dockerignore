@@ -1,0 +1,14 @@
+# Build context trimming. The web image only needs frontend/ + web/nginx.conf; the api image
+# only needs api/. Everything below is either huge, secret, or rebuilt inside the image.
+.git
+node_modules
+dist
+data
+media
+*.md
+.env
+.env.*
+!.env.example
+assets
+website
+docs

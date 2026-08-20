@@ -1,0 +1,26 @@
+# Your instance data — profiles, passkeys, per-user state, the session-cookie secret and the
+# VAPID keys. Generated on first run and never the same on two instances. BACK IT UP; don't
+# commit it. See docs/SELF_HOSTING.md §5.
+data/
+
+# Exercise images and animations. Fetched at runtime by the compose `media` service (or
+# scripts/fetch-media.sh) from hasaneyldrm/exercises-dataset. The media itself is
+# © Gym visual and licensed to that dataset, NOT to this repo — it must never be committed
+# or shipped in a release artifact. See NOTICE.md.
+media/
+
+# Local configuration (.env.example is the tracked template)
+.env
+.env.*
+!.env.example
+
+# Dependencies and build output — matched at any depth, so frontend/ and api/ are covered
+node_modules/
+dist/
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+CLAUDE.md
+EXAMPLES.md

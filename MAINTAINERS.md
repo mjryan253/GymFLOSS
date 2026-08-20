@@ -210,8 +210,9 @@ The version lives in five places and they must move together:
 2. `api/package.json`
 3. `frontend/android/app/build.gradle` — `versionName`, **and** `versionCode`, which must
    strictly increase or Android refuses to install over an existing APK
-4. `frontend/ios/App/App.xcodeproj/project.pbxproj` — `MARKETING_VERSION` *(currently drifted:
-   it still reads `1.0` against everything else at `1.2.4`)*
+4. `frontend/ios/App/App.xcodeproj/project.pbxproj` — `MARKETING_VERSION` and
+   `CURRENT_PROJECT_VERSION`. These had drifted to `1.0`/`1` because the iOS app has never been
+   released; they are now aligned with `1.2.4`/`5` and must be kept there.
 5. a `CHANGELOG.md` entry
 
 Then tag `vX.Y.Z`, which is what publishes the container images.
@@ -228,7 +229,8 @@ Then tag `vX.Y.Z`, which is what publishes the container images.
 - `docs/SELF_HOSTING.md:155` claims the app shell is versioned with `?v=N`. No code implements
   that; the service worker is a runtime cache keyed on Vite's content-hashed filenames, which
   is the mechanism that actually makes updates land. Fix the doc, not the SW.
-- The iOS project has never been released — hence the version drift above.
+- The iOS project has never been released, so its build settings have never been exercised by
+  a real archive. Expect to fix signing before it produces anything.
 
 ## 12. Where to take it next
 

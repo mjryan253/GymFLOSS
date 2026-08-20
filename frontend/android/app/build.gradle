@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "io.github.mjryan253.opengym"
+    namespace "io.github.mjryan253.gymfloss"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "io.github.mjryan253.opengym"
+        applicationId "io.github.mjryan253.gymfloss"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 5

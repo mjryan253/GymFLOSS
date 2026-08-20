@@ -1,25 +1,35 @@
 # Third-party notices
 
+**GymFLOSS** is a renamed fork of **openGym**.
+
 openGym — Copyright (C) 2026 Duarte Santos.
-openGym's own code is licensed under the **GNU AGPL v3.0** (see [LICENSE](LICENSE)).
+The code, in both projects, is licensed under the **GNU AGPL v3.0** (see [LICENSE](LICENSE)).
 
-## Provenance
+## Provenance and the rename
 
-This repository is a fork. openGym was written by **Duarte Santos**
-(`github.com/DuarteSantos8`), whose repository, website and published images are no longer
-reachable; the only surviving public copy was a re-upload by a third party, from which this
-fork descends. Original authorship and copyright are unchanged and are asserted above.
-Modifications made since the fork are © their respective contributors under the same license.
-See `MAINTAINERS.md` for the full chain of custody.
+openGym was written by **Duarte Santos** (`github.com/DuarteSantos8`), whose repository,
+website and published images are no longer reachable; the only surviving public copy was a
+re-upload by a third party, from which this fork descends.
+
+This fork is distributed under the name **GymFLOSS** so that it is not mistaken for the
+original project and so that no bug, change or statement made here is attributed to openGym's
+author. The AGPL permits and this notice records it: original authorship and copyright are
+unchanged and asserted above, the license is unchanged, and modifications made since the fork
+are © their respective contributors under the same terms. Duarte Santos does not endorse this
+fork and has not been consulted about it.
+
+Files retaining openGym's name are doing so deliberately: `CHANGELOG.md` records openGym's
+release history and is left as written, and `MAINTAINERS.md` documents the full chain of
+custody.
 
 ## App store exception
 
 As an additional permission under section 7 of the AGPL v3.0, the copyright holder permits
-distribution of the openGym mobile application through app store platforms (such as the
-Apple App Store and Google Play) whose terms of service would otherwise be incompatible
-with the AGPL, provided the corresponding source code remains available under the AGPL at
-the project repository. This permission applies to the distribution channel only and does
-not otherwise limit the license.
+distribution of the openGym mobile application — and therefore of GymFLOSS, as a fork of it —
+through app store platforms (such as the Apple App Store and Google Play) whose terms of
+service would otherwise be incompatible with the AGPL, provided the corresponding source code
+remains available under the AGPL at the project repository. This permission applies to the
+distribution channel only and does not otherwise limit the license.
 
 ## Body diagram geometry
 
@@ -59,7 +69,7 @@ The exercise names, instructions (English in `frontend/src/lib/exercises-data.js
 languages in `frontend/src/instr/`, regenerated via `scripts/build-instructions.mjs`), images
 and animations (fetched into `media/` at build time) come from
 [**hasaneyldrm/exercises-dataset**](https://github.com/hasaneyldrm/exercises-dataset)
-and are **not** covered by openGym's AGPL license — they remain under that dataset's own terms.
+and are **not** covered by the AGPL license — they remain under that dataset's own terms.
 That dataset is MIT for its code, data and instruction text, but its **media carries separate
 terms**:
 

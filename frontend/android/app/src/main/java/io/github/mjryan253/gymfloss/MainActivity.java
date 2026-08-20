@@ -1,4 +1,4 @@
-package io.github.mjryan253.opengym;
+package io.github.mjryan253.gymfloss;
 
 import com.getcapacitor.BridgeActivity;
 

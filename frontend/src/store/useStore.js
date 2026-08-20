@@ -5,7 +5,7 @@ import { registerCustom } from '../lib/exercises.js'
 import { DEMO, DEMO_SEEDED } from '../lib/demo.js'
 import { MOBILE, nativeLoad, nativeSave, syncReminder } from '../lib/mobile.js'
 
-const KEY = 'gym_state_v1'
+const KEY = 'gymfloss_state_v1'
 export const DEF = {
   unit: 'kg', restSec: 90, sound: true, keepAwake: true, lang: 'en',
   theme: 'dark', accent: 'lime', body: 'male', targetW: null,
@@ -73,15 +73,15 @@ export const useStore = create((set, get) => {
   // Everything a sign-out leaves behind on this device, whichever way it was triggered.
   const clearLocalSession = () => {
     get().setUser(null)
-    localStorage.removeItem('gym_guest')
-    localStorage.removeItem('gym_dirty')
+    localStorage.removeItem('gymfloss_guest')
+    localStorage.removeItem('gymfloss_dirty')
     localStorage.removeItem(KEY)
     persist(clone(DEF), false)
   }
 
   return {
     S: (() => { const s = loadState(); registerCustom(s.customEx); return s })(),
-    user: (() => { try { return JSON.parse(localStorage.getItem('gym_user')) || null } catch { return null } })(),
+    user: (() => { try { return JSON.parse(localStorage.getItem('gymfloss_user')) || null } catch { return null } })(),
     ready: false,
 
     // Mutate a draft of S via producer fn, then persist + schedule sync.
@@ -92,26 +92,26 @@ export const useStore = create((set, get) => {
     },
     replaceState(S, push = false) { persist(clone(S), push) },
 
-    isGuest: () => localStorage.getItem('gym_guest') === '1',
-    setGuest(v) { if (v) localStorage.setItem('gym_guest', '1'); else localStorage.removeItem('gym_guest'); set({}) },
+    isGuest: () => localStorage.getItem('gymfloss_guest') === '1',
+    setGuest(v) { if (v) localStorage.setItem('gymfloss_guest', '1'); else localStorage.removeItem('gymfloss_guest'); set({}) },
 
     setUser(u) {
-      if (u) { localStorage.setItem('gym_user', JSON.stringify(u)); localStorage.removeItem('gym_guest') }
-      else localStorage.removeItem('gym_user')
+      if (u) { localStorage.setItem('gymfloss_user', JSON.stringify(u)); localStorage.removeItem('gymfloss_guest') }
+      else localStorage.removeItem('gymfloss_user')
       set({ user: u })
     },
 
     async pushState() {
       if (!get().user) return
       clearTimeout(pushTm)
-      try { await api('/api/data', { method: 'PUT', body: JSON.stringify({ state: get().S }) }); localStorage.removeItem('gym_dirty') }
-      catch (e) { localStorage.setItem('gym_dirty', '1') }
+      try { await api('/api/data', { method: 'PUT', body: JSON.stringify({ state: get().S }) }); localStorage.removeItem('gymfloss_dirty') }
+      catch (e) { localStorage.setItem('gymfloss_dirty', '1') }
     },
     async pullState() {
       try {
         const { state } = await api('/api/data')
         const S = get().S
-        const dirty = localStorage.getItem('gym_dirty') === '1'
+        const dirty = localStorage.getItem('gymfloss_dirty') === '1'
         if (state && (!hasData(S) || ((state._ts || 0) >= (S._ts || 0) && !dirty))) {
           const active = S.active
           const next = Object.assign(clone(DEF), state)
@@ -132,7 +132,7 @@ export const useStore = create((set, get) => {
     // the sessions elsewhere are all still valid, and wiping this device's copy of the data
     // would sign the user out of the one place the bump didn't reach. Caller reports the error.
     async signOutAll() {
-      await get().pushState()   // never throws — stores gym_dirty and moves on when offline
+      await get().pushState()   // never throws — stores gymfloss_dirty and moves on when offline
       await api('/api/logout/all', { method: 'POST', body: '{}' })
       clearLocalSession()
     },
@@ -141,7 +141,7 @@ export const useStore = create((set, get) => {
     // Dynamic import so the generator never ships in a self-hosted bundle.
     async resetDemo() {
       const { buildDemoState } = await import('../lib/demoSeed.js')
-      localStorage.removeItem('gym_dirty')
+      localStorage.removeItem('gymfloss_dirty')
       persist(Object.assign(clone(DEF), buildDemoState()), false)
     },
 

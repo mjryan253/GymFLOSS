@@ -1,6 +1,6 @@
 {
-  "appId": "io.github.mjryan253.opengym",
-  "appName": "openGym",
+  "appId": "io.github.mjryan253.gymfloss",
+  "appName": "GymFLOSS",
   "webDir": "dist",
   "backgroundColor": "#0c0e12",
   "android": {

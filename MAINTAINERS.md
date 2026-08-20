@@ -1,18 +1,21 @@
-# Maintaining openGym
+# Maintaining GymFLOSS
 
-Notes for whoever owns this repository. `CONTRIBUTING.md` covers how to make a change;
-this covers what the original author knew and never had to write down — where the project
-came from, what you are legally on the hook for, and the handful of behaviours that are easy
-to break because nothing fails loudly when you do.
+Notes for whoever owns this repository. `CONTRIBUTING.md` covers how to make a change; this
+covers what the original author knew and never had to write down — where the project came from,
+what you are legally on the hook for, and the handful of behaviours that are easy to break
+because nothing fails loudly when you do.
 
-Written on inheriting the codebase at **v1.2.4**. Verified against the tree it describes:
+GymFLOSS is a renamed fork of **openGym**. Throughout this document, *openGym* means the
+upstream project and *GymFLOSS* means this one.
+
+Written on inheriting the codebase at **v1.2.4**, and verified against the tree it describes:
 224 tracked files, 192 tests in 7 suites, 11 locales × 628 keys, 1,324 exercises.
 
 ---
 
 ## 1. Where this came from
 
-openGym was written by **Duarte Santos** (`DuarteSantos8`) and released under AGPL-3.0. That
+GymFLOSS is openGym under a new name. openGym was written by **Duarte Santos** (`DuarteSantos8`) and released under AGPL-3.0. That
 repository, its GitHub Pages demo and its website are all gone:
 
 | Upstream resource | Status |
@@ -35,14 +38,21 @@ and 2,648 media files. It also renamed `web/Dockerfile` to the repo root while a
 Render without updating `docker-compose.yml`, which left no working way to build the project.
 Those are all fixed here. If you pull anything from that lineage, expect to re-fix them.
 
+The rename to GymFLOSS came after that repair work, so commits before it carry the old name.
+`NOTICE.md` records why the fork is renamed; `CHANGELOG.md` is openGym's release history and is
+left as written. One compatibility seam survives on purpose: a shared plan file written by
+openGym carries an `opengym_plan` marker, and `lib/plan-share.js` still accepts it so those
+files import here instead of being rejected.
+
 > Anything committed under `data/` is somebody's live credentials. It is not test data.
 
 ## 2. What you are legally on the hook for
 
 **The code is AGPL-3.0-or-later.** You may self-host, modify and redistribute it; if you run a
 modified version as a network service you must offer that version's source under the same
-license. Keep `LICENSE`, and keep `NOTICE.md` — the only copyright assertion in the project is
-its first line, "© 2026 Duarte Santos". Your changes are yours, under the same terms.
+license. Keep `LICENSE`, and keep `NOTICE.md` — it carries openGym's copyright line, which is
+the only copyright assertion in the project, and it is what makes the rename honest rather than
+a quiet reattribution. Your changes are yours, under the same terms.
 
 **The exercise media is not AGPL and is not yours to ship. This is the rule most likely to be
 broken by accident, so it gets the box:**

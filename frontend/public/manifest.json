@@ -1,6 +1,6 @@
 {
-  "name": "openGym",
-  "short_name": "openGym",
+  "name": "GymFLOSS",
+  "short_name": "GymFLOSS",
   "description": "Personal gym & body weight tracker",
   "start_url": "./",
   "scope": "./",

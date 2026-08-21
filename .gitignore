@@ -38,3 +38,6 @@ EXAMPLES.md
 # Deliberately not published; CHANGELOG.md is the outward-facing record.
 .claude/worklog.md
 .claude/settings.local.json
+
+# Approved implementation plans, kept locally as working documents (see CLAUDE.md §8).
+.claude/plans/

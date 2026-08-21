@@ -31,6 +31,11 @@
 - 📌 Automated dependency updates now stay on Node's long-term-support line instead of jumping
   to the newest release the day it appears. Moving to a new major is a deliberate decision, not
   something a bot does on a Tuesday.
+- 📱 The unused Xcode project is gone. It was never released, never signed and never built by
+  CI, so carrying it implied an iPhone app that didn't actually exist — and the one route it
+  offered, free signing, expired every seven days. On iPhone GymFLOSS is a self-hosted PWA:
+  add it to your home screen from Safari and you get a full-screen app with passkey sign-in
+  and sync that never expires. The Android app and the web app are unaffected.
 
 ## v2.0.0 — 2026-08-21
 

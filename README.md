@@ -119,8 +119,8 @@ mobile app is the install-and-done flavor.
   build your own with one command (`./build-apk.sh`). GymFLOSS is deliberately not on the Play
   Store. See **[docs/MOBILE.md](docs/MOBILE.md)**.
 - **iPhone:** Apple doesn't allow installing apps outside the App Store, so there is no iOS
-  download. Self-host and add it to your home screen from Safari (it's a full PWA), or build
-  the native app onto your own device from Xcode — see **[docs/MOBILE.md](docs/MOBILE.md)**.
+  download. Self-host and add it to your home screen from Safari — it's a full PWA, with
+  passkey sign-in and sync. See **[docs/MOBILE.md](docs/MOBILE.md)**.
 
 ## How it works
 
@@ -169,7 +169,7 @@ Push notification keys are generated on first run and saved to `./data/vapid.jso
 
 Rough, community-driven — ideas and PRs welcome:
 
-- [x] Standalone mobile app — Android APK to sideload (build it: [docs/MOBILE.md](docs/MOBILE.md)); on iOS as a self-hosted PWA (no store listings planned)
+- [x] Standalone mobile app — Android APK to sideload (build it: [docs/MOBILE.md](docs/MOBILE.md)); on iPhone as a self-hosted PWA (no store listings planned)
 - [x] Automatic progression programs (linear, Greyskull LP, double progression) with stalls and deloads
 - [x] Estimated 1RM per exercise
 - [ ] Percentage / training-max programming (5/3/1-style) on top of the progression engine

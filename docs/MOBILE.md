@@ -1,10 +1,10 @@
-# Building the mobile app (iOS / Android)
+# Building the mobile app (Android)
 
 GymFLOSS ships in two flavors from the same codebase:
 
 | | **Self-hosted** (this repo's default) | **Mobile app** (`VITE_MOBILE=1`) |
 |---|---|---|
-| Runs | in any browser, against your own server | natively on iPhone / Android (Capacitor shell) |
+| Runs | in any browser, against your own server | natively on Android (Capacitor shell) |
 | Accounts | passkey sign-in, one profile per person | none — the phone *is* the account |
 | Data | synced to your server, readable on desktop | stays on the device (file in the app's private storage) |
 | Reminders | Web Push from your server | native local notifications, no server involved |
@@ -12,33 +12,29 @@ GymFLOSS ships in two flavors from the same codebase:
 
 The mobile flavor never talks to a backend: no sign-in screen, no sync, no telemetry.
 State is mirrored from `localStorage` into `gymfloss-state.json` in the app's private data
-directory on every change (iOS is allowed to evict WebView storage under pressure — the
-file mirror is the durable copy and is restored on launch). Backups go out through the
+directory on every change (the system is allowed to evict WebView storage under pressure —
+the file mirror is the durable copy and is restored on launch). Backups go out through the
 OS share sheet instead of a browser download.
 
 ## Prerequisites
 
 - Node 22.12+ (24 recommended)
 - **Android:** Android Studio (bundles the SDK). Java 21 for Gradle.
-- **iOS:** a Mac with Xcode 15+ and CocoaPods (`brew install cocoapods`). A free Apple ID
-  is enough to run the app on your own iPhone (see below); paid membership is only needed
-  for App Store distribution, which GymFLOSS doesn't do.
 
 ## Build & run
 
 ```sh
 cd frontend
 npm install
-npm run build:mobile        # VITE_MOBILE build + `cap sync` into android/ and ios/
+npm run build:mobile:android   # VITE_MOBILE build + `cap sync android`
 
-npx cap open android        # opens Android Studio → run on emulator or device
-npx cap open ios            # opens Xcode (Mac only) → set your signing team, then run
+npx cap open android           # opens Android Studio → run on emulator or device
 ```
 
-`npm run build:mobile` bakes the CDN media base into the bundle and copies the web build
-into both native projects — re-run it after every web-code change before building natively.
+`npm run build:mobile:android` bakes the CDN media base into the bundle and copies the web
+build into the native project — re-run it after every web-code change before building natively.
 
-> **Heads-up:** after `build:mobile`, `frontend/dist` contains the *mobile* bundle.
+> **Heads-up:** after `build:mobile:android`, `frontend/dist` contains the *mobile* bundle.
 > Run a plain `npm run build` again before deploying `dist` to a server.
 
 ## App icons & splash screens
@@ -74,7 +70,7 @@ Node if they're missing, builds, and signs with a keystore it generates into `.s
 What the script does, by hand:
 
 ```sh
-cd frontend && npm run build:mobile
+cd frontend && npm run build:mobile:android
 cd android && ./gradlew assembleRelease            # → app/build/outputs/apk/release/app-release-unsigned.apk
 
 # one-time: create a keystore. KEEP IT — updates must be signed with the same key,
@@ -89,13 +85,13 @@ apksigner sign --ks my.keystore --ks-key-alias gymfloss --out GymFLOSS.apk align
 ### iPhone — what's actually possible
 
 Apple does not allow installing apps outside the App Store, so there is no `.ipa` download
-that would simply install. Your free options:
+that would simply install. Self-host and add the app to your home screen instead: open your
+instance in Safari → **Share** → *Add to Home Screen*. You get a full-screen app with its own
+icon, passkey sign-in and sync, and it never expires.
 
-- **Self-host + PWA** (recommended): open your instance in Safari → Share → *Add to Home
-  Screen*. Full-screen app, no expiry, plus sync and passkeys.
-- **Xcode free signing:** open `ios/` in Xcode with a free Apple ID as the team and run it
-  onto your own iPhone. Apple expires the signature after 7 days; re-run from Xcode to renew.
-- **AltStore:** automates that 7-day re-signing over Wi-Fi via a Mac companion app.
+This repo no longer ships an Xcode project, so free signing and AltStore aren't options here.
+The PWA is the supported route on iPhone, and the better one regardless — nothing to re-sign
+every seven days, and you keep sync and passkeys.
 
 ### Release notes for maintainers
 

@@ -151,12 +151,12 @@ moves one blob. Three subtleties:
 | Flavor | Selected by | Backend | Data | Media |
 |---|---|---|---|---|
 | Self-hosted (default) | — | yes: passkeys, sync, admin | your server | your server |
-| Mobile | `VITE_MOBILE=1` (`npm run build:mobile`) | none | on-device, mirrored to a file | jsDelivr CDN |
+| Mobile | `VITE_MOBILE=1` (`npm run build:mobile:android`) | none | on-device, mirrored to a file | jsDelivr CDN |
 | Demo | `VITE_DEMO=1` | none | localStorage, seeded example history | jsDelivr CDN |
 
 Each flavor's switch is a single constant (`lib/mobile.js`, `lib/demo.js`) that Vite replaces
-at build time, so the unused paths fold away. After `build:mobile`, `frontend/dist` holds the
-*mobile* bundle — re-run a plain `npm run build` before deploying `dist` anywhere.
+at build time, so the unused paths fold away. After `build:mobile:android`, `frontend/dist`
+holds the *mobile* bundle — re-run a plain `npm run build` before deploying `dist` anywhere.
 
 ## 7. The training logic is the part to be careful with
 
@@ -223,18 +223,15 @@ publish nothing and re-runs can't overwrite a published APK. The APK is signed w
 the `ANDROID_KEYSTORE_B64`/`ANDROID_KEYSTORE_PASS` repo secrets, which must stay the same key
 forever or updates stop installing over existing apps.
 
-So cutting a release = one PR that moves the version everywhere it lives — six edit sites in
-five files, and they must move together (the gate fails the publish if `build.gradle` and
+So cutting a release = one PR that moves the version everywhere it lives — five edit sites in
+four files, and they must move together (the gate fails the publish if `build.gradle` and
 `frontend/package.json` disagree):
 
 1. `frontend/package.json`
 2. `api/package.json`
 3. `frontend/android/app/build.gradle` — `versionName`, **and** `versionCode`, which must
    strictly increase or Android refuses to install over an existing APK
-4. `frontend/ios/App/App.xcodeproj/project.pbxproj` — `MARKETING_VERSION` and
-   `CURRENT_PROJECT_VERSION`, each appearing **twice** (Debug and Release configs). These had
-   drifted to `1.0`/`1` because the iOS app has never been released; keep them aligned.
-5. a `CHANGELOG.md` entry — drain the accumulated `## Unreleased` bullets into the new
+4. a `CHANGELOG.md` entry — drain the accumulated `## Unreleased` bullets into the new
    `## vX.Y.Z — YYYY-MM-DD` heading
 
 Merge the PR and watch the `publish` run.
@@ -251,8 +248,6 @@ Merge the PR and watch the `publish` run.
 - `docs/SELF_HOSTING.md:155` claims the app shell is versioned with `?v=N`. No code implements
   that; the service worker is a runtime cache keyed on Vite's content-hashed filenames, which
   is the mechanism that actually makes updates land. Fix the doc, not the SW.
-- The iOS project has never been released, so its build settings have never been exercised by
-  a real archive. Expect to fix signing before it produces anything.
 
 ## 12. Where to take it next
 

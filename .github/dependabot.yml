@@ -32,3 +32,11 @@ updates:
       - /web
     schedule:
       interval: weekly
+    ignore:
+      # Stay on the Active LTS line. Dependabot has no idea which Node releases are LTS, so
+      # left alone it proposes the Current line the moment it ships — it opened node:24 -> 26
+      # PRs within minutes of this file landing. Majors are opt-in: when the next even release
+      # reaches Active LTS (26 in October 2026), bump the Dockerfiles by hand and leave this
+      # rule in place. Patch and minor moves within the tracked major still come through.
+      - dependency-name: node
+        update-types: [version-update:semver-major]

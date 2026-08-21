@@ -28,6 +28,9 @@
   a TypeScript compiler and a changelog generator it never used. Five of the twelve known
   advisories in the build tooling cleared with it. The rest are development-only tools that
   never ship inside the app.
+- 📌 Automated dependency updates now stay on Node's long-term-support line instead of jumping
+  to the newest release the day it appears. Moving to a new major is a deliberate decision, not
+  something a bot does on a Tuesday.
 
 ## v2.0.0 — 2026-08-21
 

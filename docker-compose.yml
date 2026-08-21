@@ -46,7 +46,7 @@ services:
       media:
         condition: service_completed_successfully
       api:
-        condition: service_started
+        condition: service_healthy   # the api image defines the healthcheck (/api/health)
     ports:
       - "${WEB_PORT:-8080}:80"
     volumes:

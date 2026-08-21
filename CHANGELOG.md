@@ -5,6 +5,14 @@
 
 ## Unreleased
 
+- 🔒 Releases are now cut by merging a version bump into the protected `main` branch — CI
+  publishes the images, builds and signs the APK, and creates the release and tag itself.
+  Ordinary merges publish nothing.
+- ✅ The API server now has a smoke-test suite, run in CI on Node 22 and 24 — the first tests
+  the backend has ever had.
+- 🩺 The api container reports a real healthcheck, and the web container waits for it to be
+  healthy instead of merely started — no more nginx proxying into a dead API during startup.
+
 ## v2.0.0 — 2026-08-21
 
 GymFLOSS's first release as its own project. Nothing about how you train changed — this release

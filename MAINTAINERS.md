@@ -214,21 +214,30 @@ curl localhost:8080/api/health    # {"ok":true,"users":0}
 
 ## 10. Cutting a release
 
-The version lives in five places and they must move together:
+**Merging a version bump into `main` is what publishes** — there is no manual tagging step.
+`.github/workflows/publish.yml` runs on every push to `main`: it reads `versionName` from the
+Android project, and if `v<version>` has no GitHub Release yet it publishes the container
+images, builds and signs the APK, and creates the release *and* the `vX.Y.Z` tag at the merge
+commit. A version that's already released is skipped, so ordinary merges (docs, CI, refactors)
+publish nothing and re-runs can't overwrite a published APK. The APK is signed with the key in
+the `ANDROID_KEYSTORE_B64`/`ANDROID_KEYSTORE_PASS` repo secrets, which must stay the same key
+forever or updates stop installing over existing apps.
+
+So cutting a release = one PR that moves the version everywhere it lives — six edit sites in
+five files, and they must move together (the gate fails the publish if `build.gradle` and
+`frontend/package.json` disagree):
 
 1. `frontend/package.json`
 2. `api/package.json`
 3. `frontend/android/app/build.gradle` — `versionName`, **and** `versionCode`, which must
    strictly increase or Android refuses to install over an existing APK
 4. `frontend/ios/App/App.xcodeproj/project.pbxproj` — `MARKETING_VERSION` and
-   `CURRENT_PROJECT_VERSION`. These had drifted to `1.0`/`1` because the iOS app has never been
-   released; they are now aligned with `2.0.0`/`6` and must be kept there.
-5. a `CHANGELOG.md` entry
+   `CURRENT_PROJECT_VERSION`, each appearing **twice** (Debug and Release configs). These had
+   drifted to `1.0`/`1` because the iOS app has never been released; keep them aligned.
+5. a `CHANGELOG.md` entry — drain the accumulated `## Unreleased` bullets into the new
+   `## vX.Y.Z — YYYY-MM-DD` heading
 
-Then tag `vX.Y.Z`, which is what publishes the container images and attaches the signed Android
-APK to the GitHub Release (`.github/workflows/release.yml` — it signs with the key in the
-`ANDROID_KEYSTORE_B64`/`ANDROID_KEYSTORE_PASS` repo secrets, which must stay the same key
-forever or updates stop installing over existing apps).
+Merge the PR and watch the `publish` run.
 
 ## 11. Known gaps
 

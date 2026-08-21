@@ -57,6 +57,10 @@ cd frontend && npm test
 | A reproducible bug | [Issues](https://github.com/mjryan253/GymFLOSS/issues) |
 | A change you've already built | A pull request |
 
+`main` is protected: changes land through a PR with a passing test run and a review — direct
+pushes are blocked. Note that merging a version bump into `main` publishes a release
+automatically, so leave version numbers alone unless a maintainer asks.
+
 An answered question in Q&A is worth more than the same answer buried in a closed issue — the
 next person searching "passkey login fails behind my reverse proxy" actually finds it.
 

@@ -222,10 +222,13 @@ The version lives in five places and they must move together:
    strictly increase or Android refuses to install over an existing APK
 4. `frontend/ios/App/App.xcodeproj/project.pbxproj` — `MARKETING_VERSION` and
    `CURRENT_PROJECT_VERSION`. These had drifted to `1.0`/`1` because the iOS app has never been
-   released; they are now aligned with `1.2.4`/`5` and must be kept there.
+   released; they are now aligned with `2.0.0`/`6` and must be kept there.
 5. a `CHANGELOG.md` entry
 
-Then tag `vX.Y.Z`, which is what publishes the container images.
+Then tag `vX.Y.Z`, which is what publishes the container images and attaches the signed Android
+APK to the GitHub Release (`.github/workflows/release.yml` — it signs with the key in the
+`ANDROID_KEYSTORE_B64`/`ANDROID_KEYSTORE_PASS` repo secrets, which must stay the same key
+forever or updates stop installing over existing apps).
 
 ## 11. Known gaps
 

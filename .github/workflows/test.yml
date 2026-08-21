@@ -1,7 +1,8 @@
 # The training logic is pure functions with tests beside them, and every locale must carry an
 # identical key set (a missing key falls back to English silently, mid-sentence). Both are
 # checked here because neither fails loudly on its own. The api job boots the real server and
-# asserts its HTTP contract, on the Node the Docker image runs (22) and the next target (24).
+# asserts its HTTP contract, on the Node the Docker image runs (24) and the oldest one the
+# package's engines field still supports (22).
 name: test
 
 on:
@@ -24,7 +25,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci

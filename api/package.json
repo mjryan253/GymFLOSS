@@ -9,6 +9,9 @@
     "start": "node server.js",
     "test": "node --test"
   },
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "@simplewebauthn/server": "^13.1.1",
     "web-push": "^3.6.7"

@@ -61,11 +61,17 @@ accounts, no store rules, no yearly fees between you and an open-source app.
 
 ### Android — sideload the APK
 
-Upstream published a signed APK; that download is gone and this fork publishes none, so build
-your own. Android asks you to allow installs from outside the Play Store the first time —
-standard for any app that isn't in it.
+Each release attaches a signed APK — grab it from the
+[latest release](https://github.com/mjryan253/GymFLOSS/releases/latest), or build your own below.
+Android asks you to allow installs from outside the Play Store the first time — standard for any
+app that isn't in it.
 
-To build and sign it:
+The easy way: run **`./build-apk.sh`** from the repo root. It fetches the Android SDK and
+Node if they're missing, builds, and signs with a keystore it generates into `.signing/`
+(gitignored — back that directory up). The output lands at the repo root as
+`GymFLOSS-<version>.apk`.
+
+What the script does, by hand:
 
 ```sh
 cd frontend && npm run build:mobile

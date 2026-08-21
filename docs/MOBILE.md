@@ -18,7 +18,7 @@ OS share sheet instead of a browser download.
 
 ## Prerequisites
 
-- Node 20+
+- Node 22.12+ (24 recommended)
 - **Android:** Android Studio (bundles the SDK). Java 21 for Gradle.
 - **iOS:** a Mac with Xcode 15+ and CocoaPods (`brew install cocoapods`). A free Apple ID
   is enough to run the app on your own iPhone (see below); paid membership is only needed

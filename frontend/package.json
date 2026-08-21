@@ -15,6 +15,9 @@
     "check:locales": "node scripts/check-locales.mjs"
   },
   "license": "AGPL-3.0-or-later",
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "@capacitor/core": "^7.6.8",
     "@capacitor/filesystem": "^7.1.8",

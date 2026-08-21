@@ -1,0 +1,34 @@
+# Weekly dependency PRs. Minor and patch updates are grouped into one PR per ecosystem so
+# routine churn doesn't bury the interesting ones; majors deliberately arrive on their own,
+# because those are the ones that need a real look (and, for Capacitor, a device build).
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly
+    groups:
+      frontend-minor-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: npm
+    directory: /api
+    schedule:
+      interval: weekly
+    groups:
+      api-minor-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+
+  # Both images track node:NN-alpine; nginx:alpine in web/Dockerfile comes along too.
+  - package-ecosystem: docker
+    directories:
+      - /api
+      - /web
+    schedule:
+      interval: weekly

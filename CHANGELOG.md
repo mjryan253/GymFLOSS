@@ -14,6 +14,15 @@
   healthy instead of merely started — no more nginx proxying into a dead API during startup.
 - 🔐 CodeQL scanning is enabled, and every CI workflow now declares least-privilege
   `GITHUB_TOKEN` permissions explicitly instead of inheriting them.
+- ⬆️ Both containers now run Node 24, the current LTS — Node 20 reached end of life in April
+  2026 and stopped getting security patches. The api image also installs strictly from the
+  committed lockfile, so rebuilding an image can no longer quietly resolve different
+  dependency versions than the ones that were tested. Node 22 stays supported and tested.
+- 🤖 Dependency updates now arrive on their own every week, with routine minor and patch bumps
+  grouped into one pull request per package and major upgrades kept separate so they get a
+  proper look. Security fixes should stop waiting on someone remembering to check.
+- 🧪 The release build now runs the test suite itself before signing anything, so a published
+  APK can't come from code whose tests were never run in that build.
 
 ## v2.0.0 — 2026-08-21
 

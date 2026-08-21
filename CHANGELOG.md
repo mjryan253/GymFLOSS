@@ -1,5 +1,49 @@
 # Changelog
 
+<!-- Accepted changes land as bullets under `## Unreleased` below, and become the body of the
+     next release entry when it's cut. -->
+
+## Unreleased
+
+## v2.0.0 — 2026-08-21
+
+GymFLOSS's first release as its own project. Nothing about how you train changed — this release
+is about getting the app into your hands: one command to stand up a server, one command to build
+a signed Android APK, and a real download instead of a build-it-yourself README.
+
+### Two easy buttons
+
+- 🚀 **`./deploy.sh`** — self-hosting in one command. It checks Docker, writes your `.env` from
+  the template, builds the images, starts the stack and waits until the app actually answers
+  before telling you it's up. Run it again any time to update. The old quick start had two traps
+  a first-timer couldn't see past: Compose needs a `.env` that isn't in the repo, and the
+  documented `docker compose pull` couldn't work because no release had ever published images.
+- 📱 **`./build-apk.sh`** — a signed APK in one command, on a machine with nothing installed.
+  It fetches the Android SDK and Node itself, builds the web bundle, assembles the app, and
+  generates a release signing key on first run (kept in `.signing/`, which you should back up —
+  Android only accepts updates signed with the same key). Roughly 4 MB out the other end.
+
+### The Android app actually ships now
+
+- **A signed APK on the Releases page.** Every tagged release now builds the app in CI and
+  attaches it, so sideloading no longer means installing a toolchain first. You can also point
+  [Obtainium](https://github.com/ImranR98/Obtainium) at this repo and get updates automatically.
+- **The app is its own app** — `io.github.mjryan253.gymfloss`, installing alongside the upstream
+  build rather than fighting it. This is the first GymFLOSS Android build verified on real
+  hardware; the rename had never been compiled before now.
+- **Container images are published too** (`ghcr.io/mjryan253/gymfloss-api` and `-web`, amd64 and
+  arm64), which is what makes `docker compose pull` work.
+
+### Docs
+
+- **[docs/DISTRIBUTION.md](docs/DISTRIBUTION.md)** — what F-Droid, IzzyOnDroid and the rest
+  actually require, and in what order they're worth pursuing, now that signed releases exist.
+- The Android build instructions lead with the script and keep the manual recipe as the
+  explanation of what it does. The old manual steps had a wrong path, tools that aren't on
+  `PATH`, and prompts that can't be scripted; the script handles all three.
+
+*(Android versionCode 6.)*
+
 ## v1.2.4 — 2026-08-01
 
 The effort ratings you have been recording since v1.2.3 now answer questions, and bodyweight

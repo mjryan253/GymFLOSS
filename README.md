@@ -96,15 +96,13 @@ You need [Docker](https://docs.docker.com/get-docker/) with Compose.
 ```bash
 git clone https://github.com/mjryan253/GymFLOSS
 cd GymFLOSS
-cp .env.example .env
-docker compose pull   # grab prebuilt images (amd64 + arm64) — skip to build from source instead
-docker compose up -d
+./deploy.sh
 ```
 
 Open **http://localhost:8080**, tap **Create profile**, and you're in. First launch downloads
-the exercise media (~140 MB) once. Prefer building the images yourself instead of pulling from
-`ghcr.io`? Drop the `pull` step and run `docker compose up -d --build` — you don't need Node or
-a build step locally either way.
+the exercise media (~140 MB) once. The script creates `.env` from the example, builds the
+images from source, runs `docker compose up -d --build`, and waits for the health check —
+re-run it any time to update. You don't need Node or a build step locally.
 
 > Want it reachable from your phone over the internet with passkeys? You'll need an HTTPS
 > domain — a two-line change in `.env`. See **[docs/SELF_HOSTING.md](docs/SELF_HOSTING.md)**.
@@ -116,8 +114,10 @@ no backend — everything stays on the phone, with native workout-day reminders 
 backups. Self-hosting gets you multi-device sync and profiles for friends & family; the
 mobile app is the install-and-done flavor.
 
-- **Android:** build the APK and sideload it — GymFLOSS is deliberately not on the Play Store,
-  and this fork publishes no signed build. See **[docs/MOBILE.md](docs/MOBILE.md)**.
+- **Android:** download the signed APK from the
+  [latest release](https://github.com/mjryan253/GymFLOSS/releases/latest) and sideload it, or
+  build your own with one command (`./build-apk.sh`). GymFLOSS is deliberately not on the Play
+  Store. See **[docs/MOBILE.md](docs/MOBILE.md)**.
 - **iPhone:** Apple doesn't allow installing apps outside the App Store, so there is no iOS
   download. Self-host and add it to your home screen from Safari (it's a full PWA), or build
   the native app onto your own device from Xcode — see **[docs/MOBILE.md](docs/MOBILE.md)**.

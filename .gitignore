@@ -18,9 +18,22 @@ media/
 node_modules/
 dist/
 
+# APK signing identity and built APKs — the keystore is a private key: BACK IT UP,
+# never commit it. Updates must be signed with the same key or Android refuses to
+# install them. Created by build-apk.sh. `.toolchain/` holds its bootstrapped Node.
+.signing/
+.toolchain/
+*.apk
+*.keystore
+*.jks
+
 # OS noise
 .DS_Store
 Thumbs.db
 
 CLAUDE.md
 EXAMPLES.md
+
+# Local engineering log — the reasoning, dead ends and gotchas behind each change-set.
+# Deliberately not published; CHANGELOG.md is the outward-facing record.
+.claude/worklog.md

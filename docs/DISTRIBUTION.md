@@ -13,8 +13,10 @@ confirmed and should be re-checked before relying on them.
 ## The prerequisite for everything: a tagged release with a signed APK
 
 Every channel below starts from the same artifact: a `vX.Y.Z` tag with a release-signed APK
-attached. **Satisfied as of v2.0.0** — `.github/workflows/release.yml` builds and attaches the
-APK on every tag, so this is now automatic rather than a blocker.
+attached. **Satisfied as of v2.0.0, and automatic since**: when a version bump merges into
+`main`, `.github/workflows/publish.yml` builds the APK, creates the GitHub Release and mints
+the tag itself. The tags these channels read keep appearing — they're just created by CI at
+the merge commit instead of pushed by hand.
 
 - `./build-apk.sh` produces that APK. The keystore it generates in `.signing/` becomes this
   fork's **permanent release identity** — every channel verifies updates against the same
@@ -108,7 +110,8 @@ What GymFLOSS would need:
 
 ## Suggested order
 
-1. Cut `v1.2.4`: tag, GitHub Release, attach the `build-apk.sh` APK. → **Obtainium works.**
+1. ~~Cut the first release~~ **Done (v2.0.0)** — releases now cut themselves whenever a
+   version bump merges to `main`. → **Obtainium works.**
 2. Add the fastlane metadata tree + 512×512 icon; submit to **IzzyOnDroid**. → visible in
    Droid-ify and friends within days.
 3. When there's appetite for a slow review: delete the google-services classpath, write the

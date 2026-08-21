@@ -1,0 +1,166 @@
+# Publishes a release when a version bump lands on main: container images to GHCR and the
+# signed APK onto a GitHub Release, with the vX.Y.Z tag minted here at the merge commit. The
+# gate makes every other merge (docs, CI, refactors) a no-op — a version that already has a
+# release is never rebuilt or overwritten, so re-runs are safe.
+#
+# The tag is created BY this workflow, not pushed by hand. Don't split this into a
+# tag-triggered workflow chained behind a tagging step: tags pushed with the workflow's own
+# GITHUB_TOKEN don't trigger tag-triggered workflows (GitHub's recursion guard).
+name: publish
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # Reads the version from the Android project (the one source that also carries versionCode),
+  # cross-checks it against frontend/package.json — the sites are hand-synced and have drifted
+  # before — and publishes only if v<version> has no release yet.
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+      major_minor: ${{ steps.v.outputs.major_minor }}
+      publish: ${{ steps.v.outputs.publish }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: v
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          V=$(sed -n 's/.*versionName "\(.*\)"/\1/p' frontend/android/app/build.gradle | head -n1)
+          [ -n "$V" ] || { echo "could not read versionName from build.gradle"; exit 1; }
+          PKG=$(node -p "require('./frontend/package.json').version")
+          [ "$V" = "$PKG" ] || { echo "version drift: build.gradle=$V frontend/package.json=$PKG"; exit 1; }
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+          echo "major_minor=${V%.*}" >> "$GITHUB_OUTPUT"
+          if gh release view "v$V" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "v$V is already released — nothing to publish."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "v$V has no release yet — publishing."
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  # The two runtime images, amd64 + arm64 (a lot of instances are Raspberry Pis).
+  images:
+    needs: gate
+    if: needs.gate.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        include:
+          # the api image needs only api/; the web image builds the frontend, so its context
+          # is the repo root — matching docker-compose.yml
+          - name: api
+            context: ./api
+            dockerfile: ./api/Dockerfile
+          - name: web
+            context: .
+            dockerfile: ./web/Dockerfile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/gymfloss-${{ matrix.name }}
+          # raw values from the gate, not type=semver — semver only evaluates on tag refs,
+          # and this workflow runs on branch pushes.
+          tags: |
+            type=raw,value=${{ needs.gate.outputs.version }}
+            type=raw,value=${{ needs.gate.outputs.major_minor }}
+            type=raw,value=latest
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # The signed APK, attached to the GitHub Release this job creates (tag included). Mirrors
+  # build-apk.sh — same SDK packages, same align-then-sign, same key from the repo secrets,
+  # which must stay the same key forever or updates stop installing over existing apps.
+  apk:
+    needs: gate
+    if: needs.gate.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'      # the app targets Java 21; Gradle 8.11 tops out at 23
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      # sdkmanager isn't on PATH on the runner, only under the SDK it ships with.
+      - name: Install SDK packages
+        run: |
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
+            "platforms;android-35" "build-tools;34.0.0"
+
+      - name: Build the web bundle and sync the Android project
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build:mobile:android
+
+      - name: Assemble the release APK
+        working-directory: frontend/android
+        run: ./gradlew --console=plain assembleRelease
+
+      - name: Sign
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+          KS_PASS: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          VERSION: ${{ needs.gate.outputs.version }}
+        run: |
+          [ -n "$KEYSTORE_B64" ] || { echo "ANDROID_KEYSTORE_B64 secret is not set"; exit 1; }
+          printf '%s' "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.keystore"
+          BT="$ANDROID_HOME/build-tools/34.0.0"
+          APK="GymFLOSS-${VERSION}.apk"
+          "$BT/zipalign" -f -p 4 \
+            frontend/android/app/build/outputs/apk/release/app-release-unsigned.apk \
+            "$RUNNER_TEMP/aligned.apk"
+          "$BT/apksigner" sign --ks "$RUNNER_TEMP/release.keystore" --ks-key-alias gymfloss \
+            --ks-pass env:KS_PASS --out "$APK" "$RUNNER_TEMP/aligned.apk"
+          rm -f "$RUNNER_TEMP/release.keystore" "$APK.idsig"
+          "$BT/apksigner" verify --print-certs "$APK"
+          echo "APK=$APK" >> "$GITHUB_ENV"
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.gate.outputs.version }}
+          files: ${{ env.APK }}
+          body: |
+            Sideload the APK below, or track this repo in [Obtainium](https://github.com/ImranR98/Obtainium).
+            Self-hosting instead? See [docs/SELF_HOSTING.md](docs/SELF_HOSTING.md).
+
+            What changed: [CHANGELOG.md](CHANGELOG.md)

@@ -23,6 +23,11 @@
   proper look. Security fixes should stop waiting on someone remembering to check.
 - 🧪 The release build now runs the test suite itself before signing anything, so a published
   APK can't come from code whose tests were never run in that build.
+- 🧹 Build and test dependencies refreshed to their current releases, and the dependency tree
+  shed 214 packages it no longer needed — mostly an upstream build tool that stopped pulling in
+  a TypeScript compiler and a changelog generator it never used. Five of the twelve known
+  advisories in the build tooling cleared with it. The rest are development-only tools that
+  never ship inside the app.
 
 ## v2.0.0 — 2026-08-21
 

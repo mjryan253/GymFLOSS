@@ -10,6 +10,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Both jobs only check out and run npm — nothing here needs write access.
+permissions:
+  contents: read
+
 jobs:
   frontend:
     runs-on: ubuntu-latest

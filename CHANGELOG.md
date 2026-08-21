@@ -12,6 +12,8 @@
   the backend has ever had.
 - 🩺 The api container reports a real healthcheck, and the web container waits for it to be
   healthy instead of merely started — no more nginx proxying into a dead API during startup.
+- 🔐 CodeQL scanning is enabled, and every CI workflow now declares least-privilege
+  `GITHUB_TOKEN` permissions explicitly instead of inheriting them.
 
 ## v2.0.0 — 2026-08-21
 

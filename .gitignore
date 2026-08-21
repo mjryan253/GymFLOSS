@@ -37,3 +37,4 @@ EXAMPLES.md
 # Local engineering log — the reasoning, dead ends and gotchas behind each change-set.
 # Deliberately not published; CHANGELOG.md is the outward-facing record.
 .claude/worklog.md
+.claude/settings.local.json

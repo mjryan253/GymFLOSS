@@ -47,8 +47,10 @@
 - 🧹 Dropped a dead Google Services build hook that had been sitting in the Android project
   since before the fork. It never ran — there was no configuration file for it — but it made
   the build look like it talked to Google, and F-Droid's scanner flags exactly that.
-- 📸 Fresh app screenshots in the README and on the site, taken on the current build and
-  showing the real GymFLOSS branding rather than the pre-rename captures.
+- 📸 Fresh Home, Plan, Stats and Exercises screenshots in the README and on the site, taken
+  on the current build and showing the real GymFLOSS branding rather than the pre-rename
+  captures. The guided-workout shot is unchanged — it's still the clearest picture of what
+  using the app actually looks like.
 
 ## v2.0.0 — 2026-08-21
 

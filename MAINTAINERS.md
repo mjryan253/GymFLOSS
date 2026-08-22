@@ -233,9 +233,9 @@ four files, and they must move together (the gate fails the publish if `build.gr
    strictly increase or Android refuses to install over an existing APK
 4. a `CHANGELOG.md` entry — drain the accumulated `## Unreleased` bullets into the new
    `## vX.Y.Z — YYYY-MM-DD` heading. **This one is mandatory, not courtesy:** the gate
-   greps for `## v<version>` followed by a space and refuses to publish without it, and
-   that section becomes the release body verbatim. Keep the ` — YYYY-MM-DD` suffix — a
-   bare `## vX.Y.Z` has no trailing space and the gate won't match it.
+   looks for a `## v<version>` heading and refuses to publish without one, and that
+   section becomes the release body verbatim. The date suffix is convention, not a
+   requirement — the gate matches the version token itself, so `## v1.2.3` alone works.
 
 Merge the PR and watch the `publish` run.
 

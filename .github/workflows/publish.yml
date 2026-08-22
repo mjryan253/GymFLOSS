@@ -49,7 +49,14 @@ jobs:
             # The release body is built from this section, so a missing one means a release
             # with no notes. Fail here rather than at the publish step: this runs before
             # anything is pushed, tagged or signed.
-            grep -q "^## v$V " CHANGELOG.md || {
+            #
+            # Deliberately awk and not grep: this has to agree exactly with the extraction in
+            # the apk job, which matches on the second whitespace-separated field. A grep
+            # pattern would differ in two ways that both bite — the dots in "$V" are regex
+            # wildcards, and anchoring the trailing space would reject a bare "## v1.2.3"
+            # heading that the extraction accepts. Comparing fields sidesteps both.
+            awk -v v="v$V" '$1 == "##" && $2 == v { found = 1; exit } END { exit !found }' \
+              CHANGELOG.md || {
               echo "CHANGELOG.md has no '## v$V' section — drain '## Unreleased' into one first."
               exit 1
             }

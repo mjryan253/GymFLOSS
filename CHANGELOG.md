@@ -51,6 +51,9 @@
   on the current build and showing the real GymFLOSS branding rather than the pre-rename
   captures. The guided-workout shot is unchanged — it's still the clearest picture of what
   using the app actually looks like.
+- 📝 Release pages now carry the actual list of what changed, taken straight from this file,
+  instead of a link asking you to go and read it elsewhere. A release can no longer be cut
+  without those notes existing — the build refuses to publish a version that has none.
 
 ## v2.0.0 — 2026-08-21
 

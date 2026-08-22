@@ -232,9 +232,17 @@ four files, and they must move together (the gate fails the publish if `build.gr
 3. `frontend/android/app/build.gradle` — `versionName`, **and** `versionCode`, which must
    strictly increase or Android refuses to install over an existing APK
 4. a `CHANGELOG.md` entry — drain the accumulated `## Unreleased` bullets into the new
-   `## vX.Y.Z — YYYY-MM-DD` heading
+   `## vX.Y.Z — YYYY-MM-DD` heading. **This one is mandatory, not courtesy:** the gate
+   greps for `## v<version>` followed by a space and refuses to publish without it, and
+   that section becomes the release body verbatim. Keep the ` — YYYY-MM-DD` suffix — a
+   bare `## vX.Y.Z` has no trailing space and the gate won't match it.
 
 Merge the PR and watch the `publish` run.
+
+The release body is assembled by CI, not written by hand: everything between the version's
+heading and the next `## ` becomes the release notes, with the Obtainium and self-hosting
+lines appended as a footer. What you write in the CHANGELOG is what people read on the
+Releases page, so write that section for them rather than as an internal note.
 
 ## 11. Known gaps
 

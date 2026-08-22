@@ -113,7 +113,7 @@ jobs:
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '21'      # the app targets Java 21; Gradle 8.11 tops out at 23
+          java-version: '21'      # the app targets Java 21; Gradle 8.14 runs on up to 24
       - uses: actions/setup-node@v7
         with:
           node-version: '24'
@@ -124,7 +124,7 @@ jobs:
       - name: Install SDK packages
         run: |
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
-            "platforms;android-35" "build-tools;34.0.0"
+            "platforms;android-36" "build-tools;35.0.0"
 
       - name: Build the web bundle and sync the Android project
         working-directory: frontend
@@ -148,7 +148,7 @@ jobs:
         run: |
           [ -n "$KEYSTORE_B64" ] || { echo "ANDROID_KEYSTORE_B64 secret is not set"; exit 1; }
           printf '%s' "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.keystore"
-          BT="$ANDROID_HOME/build-tools/34.0.0"
+          BT="$ANDROID_HOME/build-tools/35.0.0"
           APK="GymFLOSS-${VERSION}.apk"
           "$BT/zipalign" -f -p 4 \
             frontend/android/app/build/outputs/apk/release/app-release-unsigned.apk \

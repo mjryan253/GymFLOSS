@@ -15,6 +15,8 @@ Decisions made up front:
 
 - **Stay on Capacitor 7.6.8** — defer the v8 native migration (requires SDK 36, minSdk 24,
   AGP 8.13, Xcode 26, and a verifiable Android build).
+  *(Superseded: the Capacitor 8 migration was carried out later, once a device build could be
+  verified. The iOS half became moot when the Xcode project was dropped.)*
 - **Bump to Node 24** (Active LTS since October 2025).
 - **Add grouped weekly Dependabot** so versions stop drifting silently.
 - **Add minimal ESLint** (flat config, recommended rules + react-hooks).

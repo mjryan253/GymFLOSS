@@ -57,8 +57,11 @@
   --ease:cubic-bezier(.32,.72,0,1);
   --fast:140ms; --med:220ms;
 
-  --sab:env(safe-area-inset-bottom,0px);
-  --sat:env(safe-area-inset-top,0px);
+  /* Capacitor 8 injects --safe-area-inset-* itself. targetSdk 36 forces edge-to-edge on
+     Android 16+, and older WebViews get env() wrong, so prefer Capacitor's value and keep
+     env() as the fallback for the browser and PWA builds. */
+  --sab:var(--safe-area-inset-bottom, env(safe-area-inset-bottom,0px));
+  --sat:var(--safe-area-inset-top, env(safe-area-inset-top,0px));
 }
 
 :root[data-theme="light"] {

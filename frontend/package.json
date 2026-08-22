@@ -18,19 +18,19 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@capacitor/core": "^7.6.8",
-    "@capacitor/filesystem": "^7.1.8",
-    "@capacitor/local-notifications": "^7.0.7",
-    "@capacitor/share": "^7.0.4",
+    "@capacitor/core": "^8.0.0",
+    "@capacitor/filesystem": "^8.0.0",
+    "@capacitor/local-notifications": "^8.0.0",
+    "@capacitor/share": "^8.0.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.18.2",
     "zustand": "^5.0.15"
   },
   "devDependencies": {
-    "@capacitor/android": "^7.6.8",
+    "@capacitor/android": "^8.0.0",
     "@capacitor/assets": "^3.0.5",
-    "@capacitor/cli": "^7.6.8",
+    "@capacitor/cli": "^8.0.0",
     "@vitejs/plugin-react": "^6.1.0",
     "vite": "^8.2.2",
     "vitest": "^4.1.11"

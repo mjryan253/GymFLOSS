@@ -34,8 +34,8 @@ command -v java >/dev/null 2>&1 \
   || die "no JDK found. Gradle needs Java 21: sudo apt install openjdk-21-jdk"
 JAVA_MAJOR=$(java -version 2>&1 | sed -n 's/.*version "\([0-9]*\).*/\1/p' | head -n1)
 case "$JAVA_MAJOR" in
-  21|22|23) ;;
-  *) die "Java ${JAVA_MAJOR:-?} won't work: the app targets Java 21 and this Gradle supports at most 23.
+  21|22|23|24) ;;
+  *) die "Java ${JAVA_MAJOR:-?} won't work: the app targets Java 21 and this Gradle supports at most 24.
 Install JDK 21:  sudo apt install openjdk-21-jdk" ;;
 esac
 command -v keytool >/dev/null 2>&1 || die "keytool not found — install a full JDK, not a JRE."
@@ -74,7 +74,7 @@ say "✓ Java $JAVA_MAJOR, Node $(node --version)"
 ANDROID_HOME="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-$HOME/Android/Sdk}}"
 export ANDROID_HOME
 SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
-BUILD_TOOLS="$ANDROID_HOME/build-tools/34.0.0"
+BUILD_TOOLS="$ANDROID_HOME/build-tools/35.0.0"
 
 if [ ! -x "$SDKMANAGER" ]; then
   say "↓ Android SDK not found — installing command-line tools into $ANDROID_HOME…"
@@ -89,12 +89,12 @@ if [ ! -x "$SDKMANAGER" ]; then
   rm -rf "$ANDROID_HOME/.cmdline-tools-tmp" "$ANDROID_HOME/$CMDTOOLS_ZIP"
 fi
 
-if [ ! -d "$BUILD_TOOLS" ] || [ ! -d "$ANDROID_HOME/platforms/android-35" ]; then
-  say "↓ Installing SDK packages (platform 35, build-tools 34, platform-tools)…"
+if [ ! -d "$BUILD_TOOLS" ] || [ ! -d "$ANDROID_HOME/platforms/android-36" ]; then
+  say "↓ Installing SDK packages (platform 36, build-tools 35, platform-tools)…"
   set +o pipefail
   yes | "$SDKMANAGER" --licenses >/dev/null
   set -o pipefail
-  "$SDKMANAGER" --install "platform-tools" "platforms;android-35" "build-tools;34.0.0" >/dev/null
+  "$SDKMANAGER" --install "platform-tools" "platforms;android-36" "build-tools;35.0.0" >/dev/null
 fi
 printf 'sdk.dir=%s\n' "$ANDROID_HOME" > frontend/android/local.properties
 

@@ -36,6 +36,19 @@
   offered, free signing, expired every seven days. On iPhone GymFLOSS is a self-hosted PWA:
   add it to your home screen from Safari and you get a full-screen app with passkey sign-in
   and sync that never expires. The Android app and the web app are unaffected.
+- ⚠️ **The Android app now needs Android 7.0 or newer**, up from 6.0. Capacitor 8 sets the
+  floor and there's no way around it. If you're on Android 6, 2.0.0 is the last version that
+  will install — it keeps working, it just won't update.
+- 🚀 The Android app moves to Capacitor 8, and with it Android 16 (API 36) as the build target,
+  Gradle 8.14.3 and AGP 8.13. Screens now draw edge to edge the way Android 16 expects, and the
+  app reads the system's own safe-area insets, so content sits clear of the status bar and
+  gesture bar instead of guessing. Everything still installs as an update over 2.0.0 —
+  same signing key, your history stays put.
+- 🧹 Dropped a dead Google Services build hook that had been sitting in the Android project
+  since before the fork. It never ran — there was no configuration file for it — but it made
+  the build look like it talked to Google, and F-Droid's scanner flags exactly that.
+- 📸 Fresh app screenshots in the README and on the site, taken on the current build and
+  showing the real GymFLOSS branding rather than the pre-rename captures.
 
 ## v2.0.0 — 2026-08-21
 

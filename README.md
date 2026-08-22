@@ -32,9 +32,9 @@ No account on someone else's server, no subscription, no ads. Just `docker compo
 <div align="center">
 <table>
 <tr>
-<td align="center"><img src="assets/screenshots/home.png" alt="Home" width="230"><br><sub><b>Home</b> — today's workout & weight</sub></td>
-<td align="center"><img src="assets/screenshots/workout.png" alt="Workout" width="230"><br><sub><b>Guided workout</b> — animated demos & sets</sub></td>
-<td align="center"><img src="assets/screenshots/stats.png" alt="Stats" width="230"><br><sub><b>Stats</b> — heatmap, charts & PRs</sub></td>
+<td align="center"><img src="assets/screenshots/home.jpg" alt="Home" width="230"><br><sub><b>Home</b> — today's workout & weight</sub></td>
+<td align="center"><img src="assets/screenshots/workout.jpg" alt="Pre-workout check-in" width="230"><br><sub><b>Check-in</b> — weigh in, then start the session</sub></td>
+<td align="center"><img src="assets/screenshots/stats.jpg" alt="Stats" width="230"><br><sub><b>Stats</b> — heatmap, charts & PRs</sub></td>
 </tr>
 </table>
 </div>

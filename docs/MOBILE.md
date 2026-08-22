@@ -19,7 +19,10 @@ OS share sheet instead of a browser download.
 ## Prerequisites
 
 - Node 22.12+ (24 recommended)
-- **Android:** Android Studio (bundles the SDK). Java 21 for Gradle.
+- **Android:** Android Studio (bundles the SDK), with SDK platform 36 and build-tools 35.0.0.
+  Java 21 for Gradle (Gradle 8.14 runs on up to 24). `./build-apk.sh` installs the SDK pieces
+  itself if they're missing.
+- **Minimum Android version: 7.0 (API 24)**, raised from 6.0 by Capacitor 8.
 
 ## Build & run
 

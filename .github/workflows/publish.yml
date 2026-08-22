@@ -46,6 +46,20 @@ jobs:
             echo "v$V is already released — nothing to publish."
             echo "publish=false" >> "$GITHUB_OUTPUT"
           else
+            # The release body is built from this section, so a missing one means a release
+            # with no notes. Fail here rather than at the publish step: this runs before
+            # anything is pushed, tagged or signed.
+            #
+            # Deliberately awk and not grep: this has to agree exactly with the extraction in
+            # the apk job, which matches on the second whitespace-separated field. A grep
+            # pattern would differ in two ways that both bite — the dots in "$V" are regex
+            # wildcards, and anchoring the trailing space would reject a bare "## v1.2.3"
+            # heading that the extraction accepts. Comparing fields sidesteps both.
+            awk -v v="v$V" '$1 == "##" && $2 == v { found = 1; exit } END { exit !found }' \
+              CHANGELOG.md || {
+              echo "CHANGELOG.md has no '## v$V' section — drain '## Unreleased' into one first."
+              exit 1
+            }
             echo "v$V has no release yet — publishing."
             echo "publish=true" >> "$GITHUB_OUTPUT"
           fi
@@ -159,12 +173,31 @@ jobs:
           "$BT/apksigner" verify --print-certs "$APK"
           echo "APK=$APK" >> "$GITHUB_ENV"
 
+      # The release notes are the version's own CHANGELOG section, verbatim, so what people
+      # read on the release page is the same text the file carries. awk takes everything after
+      # the matching '## vX.Y.Z' heading up to the next '## ' heading.
+      - name: Build the release body from CHANGELOG.md
+        env:
+          VERSION: ${{ needs.gate.outputs.version }}
+        run: |
+          awk -v v="v$VERSION" '/^## /{ if (hit) exit; if ($2 == v) { hit = 1; next } } hit' \
+            CHANGELOG.md > "$RUNNER_TEMP/release-body.md"
+          # The gate already refused a missing heading; this catches a heading with nothing
+          # under it, which the gate's grep cannot see.
+          grep -q '[^[:space:]]' "$RUNNER_TEMP/release-body.md" || {
+            echo "CHANGELOG.md has a '## v$VERSION' heading but no content under it."
+            exit 1
+          }
+          cat >> "$RUNNER_TEMP/release-body.md" <<'FOOTER'
+
+          ---
+
+          Sideload the APK below, or track this repo in [Obtainium](https://github.com/ImranR98/Obtainium).
+          Self-hosting instead? See [docs/SELF_HOSTING.md](docs/SELF_HOSTING.md).
+          FOOTER
+
       - uses: softprops/action-gh-release@v3
         with:
           tag_name: v${{ needs.gate.outputs.version }}
           files: ${{ env.APK }}
-          body: |
-            Sideload the APK below, or track this repo in [Obtainium](https://github.com/ImranR98/Obtainium).
-            Self-hosting instead? See [docs/SELF_HOSTING.md](docs/SELF_HOSTING.md).
-
-            What changed: [CHANGELOG.md](CHANGELOG.md)
+          body_path: ${{ runner.temp }}/release-body.md

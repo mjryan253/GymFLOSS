@@ -13,7 +13,7 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@simplewebauthn/server": "^13.1.1",
+    "@simplewebauthn/server": "^13.3.3",
     "web-push": "^3.6.7"
   }
 }
